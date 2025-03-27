@@ -4,7 +4,11 @@ const app = express();
 const path = require("path");
 const PORT = 5500
 const cors = require('cors');
-
+const dbConnection= require('./utils/dbconnection')
+const authRouter = require('./Routes/auth.route')
+const crudRouter = require('./Routes/crud.route')
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
     cors({
       origin: "*",
@@ -12,7 +16,8 @@ app.use(
     })
   );
 
-
+  app.use('/auth',authRouter)
+  app.use('/crud',crudRouter)
 
 
 
@@ -23,4 +28,10 @@ if(process.env.ENVIRONMENT === 'Production'){
       });
 }
 
-app.listen(PORT,()=>console.log(`Server is running on port ${PORT}`))
+dbConnection()
+  .then((resp) => {
+    app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
+  })
+  .catch((err) => {
+    console.log(err);
+  });
