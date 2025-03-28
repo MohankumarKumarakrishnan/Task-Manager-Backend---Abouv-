@@ -21,12 +21,6 @@ app.use(
 
 
 
-if(process.env.ENVIRONMENT === 'Production'){
-    app.use(express.static(path.join(__dirname, "../Task Manager/dist")))
-    app.use("/", (req, res) => {
-        res.sendFile(path.resolve(__dirname, "../Task Manager", "dist", "index.html"));
-      });
-}
 
 dbConnection()
   .then((resp) => {
